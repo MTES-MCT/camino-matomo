@@ -1,6 +1,6 @@
 # Camino Matomo
 
-> Instance Matomo de [Camino](http://camino.beta.gouv.fr/)
+> Instance Matomo de Camino
 
 ---
 
@@ -8,6 +8,21 @@
 
 - [Matomo](https://fr.matomo.org/free-software/)
 - [Docker](https://www.docker.com/)
+
+---
+
+## Pré-requis
+
+- Docker et docker-compose
+
+---
+
+## Configuration
+
+- Renommer et complèter le fichier `.env-example` en `.env`.
+- Suivre les instructions de configuration de Docker dans `docker.md`.
+- Créer une base de données et un utilisateur autorisé dans le conteneur `mysql`
+- Accéder à l'interface matomo dans un navigateur sur l'url et le port définis dans docker.
 
 ---
 
