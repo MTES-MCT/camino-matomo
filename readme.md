@@ -20,7 +20,7 @@
 ## Configuration
 
 - Renommer et complèter le fichier `.env-example` en `.env`.
-- Suivre les instructions de configuration de Docker dans `docker.md`.
+- Suivre les instructions de configuration de Docker dans `docker-compose.md`.
 - Créer une base de données et un utilisateur autorisé dans le conteneur `mysql`
 - Accéder à l'interface matomo dans un navigateur sur l'url et le port définis dans docker.
 

@@ -1,43 +1,30 @@
-# Configurations Docker
+# Matomo dans Docker
 
-## Environnement de développement (localhost)
+Ce fichier décrit l'installation en local de Matomo et MySql dans deux conteneurs Docker.
+
+## Mysql
 
 ```bash
-# démarre l'application dans des conteneurs Docker
-# en mode `development`
-# accessible à http://localhost:PORT
-docker-compose -f ./docker-compose.localhost.yml up --build
+docker pull mysql
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=mdp -d mysql:latest
 ```
 
-## Environnement local
-
-Pour lancer l'application en local dans un environnement de production
-
-Pré-requis:
-
-- une installation locale active de https://github.com/jwilder/nginx-proxy
-- modifier le fichier `hosts` de l'environnement de dev pour faire pointer `127.0.0.1` vers `URL`
-- un certificat ssl auto-signé
-
-[Instructions complètes](https://medium.com/@francoisromain/set-a-local-web-development-environment-with-custom-urls-and-https-3fbe91d2eaf0)
+## Matomo
 
 ```bash
-# démarre l'application et la base de données dans des containers Docker
-# en mode `production`
-# accessible à https://{URL}
-docker-compose -f ./docker-compose.local.yml up --build
+docker pull matomo
+docker run -d -p 8088:80 --name matomo --link mysql:db -v matomo:/var/www/html matomo
 ```
 
-## Environnement de production
+Accès à Matomo à localhost:8088
 
-Pré-requis:
+---
 
-- une installation active de https://github.com/jwilder/nginx-proxy
-- [instructions](https://medium.com/@francoisromain/host-multiple-websites-with-https-inside-docker-containers-on-a-single-server-18467484ab95)
+Config PHP pour accéder à Matomo sur le port 8080 (en local):
 
 ```bash
-# démarre l'application et la base de données dans des containers Docker
-# en mode `production`
-# accessible à http://api.camino.beta.gouv.fr
-docker-compose up -d --build
+# ajoute la ligne 'enable_trusted_host_check=0'
+# dans la partie '[General]' du fichier ./config/config.ini.php
+
+docker exec -it matomo sed -i -e "s/\"localhost\"/\"localhost\"\\nenable_trusted_host_check=0/g" ./config/config.ini.php
 ```
