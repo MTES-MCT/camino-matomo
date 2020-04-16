@@ -1,6 +1,6 @@
 # Matomo dans Docker
 
-Ce fichier décrit l'installation en local de Matomo et MySql dans deux conteneurs Docker.
+> installation de Matomo et MySql dans deux conteneurs Docker (sans docker-compose).
 
 ## Mysql
 
@@ -16,15 +16,23 @@ docker pull matomo
 docker run -d -p 8088:80 --name matomo --link mysql:db -v matomo:/var/www/html matomo
 ```
 
-Accès à Matomo à localhost:8088
+Matomo est accessible à localhost:8088
 
----
+### Accéder à Matomo sur un port autre que 80
 
-Config PHP pour accéder à Matomo sur le port 8080 (en local):
+Par défaut le conteneur Matomo est accessible uniquement sur le port 80. Pour changer ce réglage, il faut modifier la config de PHP dans le conteneur.
 
 ```bash
-# ajoute la ligne 'enable_trusted_host_check=0'
-# dans la partie '[General]' du fichier ./config/config.ini.php
+# ouvre un shell dans le conteneur Docker matomo
+docker exec -it matomo sh
 
-docker exec -it matomo sed -i -e "s/\"localhost\"/\"localhost\"\\nenable_trusted_host_check=0/g" ./config/config.ini.php
+# install nano (éditeur de texte) dans le conteneur
+apk update
+apk add nano
+
+# édite le fichier config/config.ini.php
+nano config/config.ini.php
+
+# ajoute le port sur la ligne
+trusted_hosts[] = "localhost:7000"
 ```
